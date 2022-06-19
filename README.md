@@ -234,5 +234,11 @@ class Solution:
 
 ## 手写快排 
 
+快排分为两个部分，一个是quicksort主体递归部分，另一个是partition分区部分。
+
+
+
 ### 为什么快排的时间复杂度是O(nlgn)?
+
+
 
