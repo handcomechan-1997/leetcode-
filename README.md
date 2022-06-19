@@ -77,3 +77,66 @@ class Solution:
         return ans
 ```
 
+
+
+### Leetcode 17.电话号码的字母组合
+
+[Leetcode 17.电话号码的字母组合](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/)
+
+```python3
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        if not digits:
+            return []
+        phone = {2:['a','b','c'],3:['d','e','f'],4:['g','h','i'],5:['j','k','l'],6:['m','n','o'],7:['p','q','r','s'],8:['t','u','v'],9:['w','x','y','z']}
+        ans = []
+        tmp = []
+        def dfs(idx):
+            if idx == len(digits):
+                ans.append(''.join(tmp[::]))
+                return
+            for c in phone[int(digits[idx])]:
+                tmp.append(c)
+                dfs(idx+1)
+                tmp.pop()
+        dfs(0)
+        return ans
+```
+
+
+
+### Leetcode 51.N皇后
+
+#### [51. N 皇后](https://leetcode.cn/problems/n-queens/)
+
+```python3
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        col = set()
+        down = set()
+        up = set()
+        ans = []
+        tmp = []
+        def dfs(idx):
+            if idx == n:
+                ans.append(tmp[::])
+                return
+            for i in range(n):
+                if i not in col and i+idx not in down and i-idx not in up:
+                    # 添加
+                    col.add(i)
+                    down.add(i+idx)
+                    up.add(i-idx)
+                    s = '.'*i+'Q'+'.'*(n-i-1)
+                    tmp.append(s)
+                    #下一层
+                    dfs(idx+1)
+                    # 撤销
+                    col.remove(i)
+                    down.remove(i+idx)
+                    up.remove(i-idx)
+                    tmp.pop()
+        dfs(0)
+        return ans
+```
+
