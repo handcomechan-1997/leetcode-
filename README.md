@@ -138,3 +138,101 @@ class Solution:
         return ans
 ```
 
+### Leetcode 39.组合总数
+
+[Leetcode 39.组合总数](https://leetcode.cn/problems/combination-sum/)
+
+```python3
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        arr = []
+        ans = []
+        def dfs(left,idx):
+            if left == 0:
+                ans.append(arr[::])
+            for i in range(idx,len(candidates)):
+                num = candidates[i]
+                if num<=left:
+                    arr.append(num)
+                    dfs(left-num,i)
+                    arr.pop()
+        dfs(target,0)
+        return ans
+```
+
+
+
+### Leetcode 40.组合总数Ⅱ
+
+[Leetcode 40.组合总数Ⅱ](https://leetcode.cn/problems/combination-sum-ii/)
+
+```python3
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        cnt = defaultdict(int)
+        for num in candidates:
+            cnt[num]+=1
+        keys = list(cnt.keys())
+        ans = []
+        arr = []
+        def dfs(left,idx):
+            if left == 0 or idx == len(keys):
+                if left == 0:
+                    tmp = []
+                    for j,num in enumerate(arr):
+                        for i in range(num):
+                            tmp.append(keys[j])
+                    ans.append(tmp[::])
+                return
+            num = keys[idx]
+            for i in range(cnt[num]+1):
+                if i*num<=left:
+                    arr.append(i)
+                    dfs(left-i*num,idx+1)
+                    arr.pop()
+                else:
+                    break
+        dfs(target,0)
+        return ans
+```
+
+### Leetcode 216.组合总数III
+
+[Leetcode 216. 组合总和 III](https://leetcode.cn/problems/combination-sum-iii/)
+
+```python3
+class Solution:
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        if n<(1+k)*k/2 or n>(19-k)*k/2:
+            return []
+        ans = []
+        arr = []
+        def dfs(numleft,sumleft,idx):
+            if numleft == 0 or sumleft == 0 or idx == 9:
+                if sumleft == 0 and numleft == 0:
+                    tmp = []
+                    for i,x in enumerate(arr):
+                        if x == 1:
+                            tmp.append(i+1)
+                    ans.append(tmp[::])
+                return
+            if numleft>0 and sumleft>=idx+1:
+                arr.append(1)
+                dfs(numleft-1,sumleft-idx-1,idx+1)
+                arr.pop()
+                arr.append(0)
+                dfs(numleft,sumleft,idx+1)
+                arr.pop()
+        dfs(k,n,0)
+        return ans
+```
+
+
+
+# 面试记录
+
+## 手写快排 
+
+### 为什么快排的时间复杂度是O(nlgn)?
+
