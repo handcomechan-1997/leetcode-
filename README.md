@@ -21,7 +21,7 @@ dfs(初始状态)
 return ans
 ```
 
-### Leetcode 46全排列
+### Leetcode 46.全排列(medium)
 
 [Leetcode 46.全排列](https://leetcode.cn/problems/permutations/)
 
@@ -51,7 +51,7 @@ class Solution:
 
 
 
-### Leetcode 78子集
+### Leetcode 78.子集(medium)
 
 [Leetcode 78.子集](https://leetcode.cn/problems/subsets/)
 
@@ -79,7 +79,7 @@ class Solution:
 
 
 
-### Leetcode 17.电话号码的字母组合
+### Leetcode 17.电话号码的字母组合(medium)
 
 [Leetcode 17.电话号码的字母组合](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/)
 
@@ -103,11 +103,9 @@ class Solution:
         return ans
 ```
 
+### Leetcode 51.N皇后(hard)
 
-
-### Leetcode 51.N皇后
-
-#### [51. N 皇后](https://leetcode.cn/problems/n-queens/)
+[51. N 皇后](https://leetcode.cn/problems/n-queens/)
 
 ```python3
 class Solution:
