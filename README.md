@@ -319,7 +319,7 @@ class Solution:
 
 ### Q3 知道秘密的人数
 
-#### [2328. 网格图中递增路径的数目](https://leetcode.cn/problems/number-of-increasing-paths-in-a-grid/)
+[2328. 网格图中递增路径的数目](https://leetcode.cn/problems/number-of-increasing-paths-in-a-grid/)
 
 ```python3
 class Solution:
