@@ -240,5 +240,125 @@ class Solution:
 
 ### 为什么快排的时间复杂度是O(nlgn)?
 
+比较笼统一点的解释：
 
+快排的基本思想，找到一个主元(pivot)，把数组分为两个部分，一边小于主元，另一边大于主元。分为两边继续下一层的操作。
+
+每一层的比较次数是O(n)。
+
+
+
+# 周赛记录
+
+## 第300场周赛
+
+### Q1 解密消息
+
+[2325. 解密消息](https://leetcode.cn/problems/decode-the-message/)
+
+```python3
+class Solution:
+    def decodeMessage(self, key: str, message: str) -> str:
+        # 第一个映射的字母是a
+        tmp = ord('a')
+        mapping = {}
+        # 空格的映射关系不变
+        mapping[' '] = ' '
+        for c in key:
+            # 按照出现的先后顺序完成映射
+            if c not in mapping:
+                # 映射成当前字符
+                mapping[c] = chr(tmp)
+                # 下一个字符
+                tmp+=1
+        ans = ''
+        for c in message:
+            ans+=mapping[c]
+        return ans
+```
+
+
+
+### Q2 螺旋矩阵IV
+
+[6111. 螺旋矩阵 IV](https://leetcode.cn/problems/spiral-matrix-iv/)
+
+```python3
+class Solution:
+    def spiralMatrix(self, m: int, n: int, head: Optional[ListNode]) -> List[List[int]]:
+        # 构造矩阵
+        ans = [[-1 for _ in range(n)] for _ in range(m)]
+        node = head
+        # 保存已更改的点的坐标
+        vis = set()
+        # 起始坐标
+        i,j = 0,0
+        # 方向
+        turn = 0
+        # 方向的矩阵，分别对应右，下，左，上
+        nextTurn = [(0,1),(1,0),(0,-1),(-1,0)]
+        while node:
+            # 改值
+            ans[i][j] = node.val
+            # 更新节点
+            node = node.next
+            vis.add((i,j))
+            while True and node:
+                # 下一个更新的坐标
+                new_x = i+nextTurn[turn][0]
+                new_y = j+nextTurn[turn][1]
+                # 保证坐标在矩阵内且没更改过
+                if 0<=new_x<m and 0<=new_y<n and (new_x,new_y) not in vis:
+                    i,j = new_x,new_y
+                    break
+                else:
+                    turn += 1
+                    turn = turn%4
+        return ans
+```
+
+### Q3 知道秘密的人数
+
+#### [2328. 网格图中递增路径的数目](https://leetcode.cn/problems/number-of-increasing-paths-in-a-grid/)
+
+```python3
+class Solution:
+    def peopleAwareOfSecret(self, n: int, delay: int, forget: int) -> int:
+        # people保存第i天知道秘密的人数
+        people = [0 for _ in range(n)]
+        people[0] = 1
+        for i in range(n):
+            for j in range(i+delay,i+forget):
+                if j<n:
+                    people[j]+=people[i]
+                else:
+                    break
+        # 后forget个人数加起来
+        return sum(people[-forget:]) % 1000000007
+```
+
+
+
+### Q4 网格图中递增路径的数目
+
+[2328. 网格图中递增路径的数目](https://leetcode.cn/problems/number-of-increasing-paths-in-a-grid/)
+
+```python3
+class Solution:
+    def countPaths(self, grid: List[List[int]]) -> int:
+        m,n = len(grid),len(grid[0])
+        @cache
+        def dfs(x,y):
+            tmp = 1
+            for i,j in [(x+1,y),(x-1,y),(x,y-1),(x,y+1)]:
+                if 0<=i<m and 0<=j<n and grid[i][j]>grid[x][y]:
+                    tmp+=dfs(i,j)
+            return tmp % 1000000007
+        ans = 0
+        for i in range(m):
+            for j in range(n):
+                ans+=dfs(i,j)
+                ans = ans % 1000000007
+        return ans
+```
 
