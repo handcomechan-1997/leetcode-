@@ -362,3 +362,44 @@ class Solution:
         return ans
 ```
 
+## 第299场周赛
+
+### Q1 判断一个矩阵是否是一个X矩阵
+
+[2319. 判断矩阵是否是一个 X 矩阵](https://leetcode.cn/problems/check-if-matrix-is-x-matrix/)
+
+```python3
+class Solution:
+    def checkXMatrix(self, grid: List[List[int]]) -> bool:
+        m = len(grid)
+        for i in range(m):
+            for j in range(m):
+                if i+j == m-1 or i-j == 0:
+                    if grid[i][j]==0:
+                        print(i,j)
+                        return False
+                else:
+                    if grid[i][j] != 0:
+                        print(i,j)
+                        return False
+        return True
+```
+
+### Q2 统计放置房子的方式数
+
+[2320. 统计放置房子的方式数](https://leetcode.cn/problems/count-number-of-ways-to-place-houses/)
+
+```python3
+class Solution:
+    def countHousePlacements(self, n: int) -> int:
+        MOD = int(1e9+7)
+        @cache
+        def dfs(k):
+            if k == 1:
+                return 2
+            if k == 0:
+                return 1
+            return (dfs(k-1)+dfs(k-2)) % MOD
+        return dfs(n)*dfs(n) % MOD
+```
+
