@@ -227,8 +227,40 @@ class Solution:
         dfs(k,n,0)
         return ans
 ```
+### Leetcode 2522. 将字符串分割成值不超过 K 的子字符串
+[Leetcode 2522. 将字符串分割成值不超过 K 的子字符串](https://leetcode.cn/contest/weekly-contest-326/problems/partition-string-into-substrings-with-values-at-most-k/)
 
-
+```python
+class Solution:
+    def minimumPartition(self, s: str, k: int) -> int:
+        # 异常检查
+        if k<9:
+            for c in s:
+                if int(c)>k:
+                    return -1
+        # 字符串转换为数字
+        def trans_str_to_int(s_nums):
+            base = 10
+            ans = 0
+            for c in s_nums:
+                ans = ans*base+int(c)
+            return ans
+        
+        # dfs(idx)表示从下标为idx的字符开始的最少子字符串数量
+        @cache
+        def dfs(idx):
+            if idx>=len(s):
+                return 0
+            
+            tmp = 2**32
+            for i in range(idx+1,len(s)+1):
+                if trans_str_to_int(s[idx:i])<=k:
+                    tmp = min(tmp,1+dfs(i))
+                else:
+                    break
+            return tmp
+        return dfs(0)
+```
 
 # 面试记录
 
