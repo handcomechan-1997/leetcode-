@@ -262,9 +262,324 @@ class Solution:
         return dfs(0)
 ```
 
+### Leetcode 200.岛屿数量(medium)
+
+[Leetcode 200.岛屿数量](https://leetcode.cn/problems/number-of-islands/)
+
+```python3
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        # m和n表示grid的行和列
+        m,n = len(grid),len(grid[0])
+        # dfs把与(i,j)相邻的陆地全部标记为'0'
+        def dfs(i,j):
+            # 判断坐标是否越界或者当前是海水
+            if i<0 or i>=m or j<0 or j>=n or grid[i][j]=='0':
+                return
+            # 标记为海水
+            grid[i][j] = '0'
+            # 四个方向
+            dfs(i+1,j)
+            dfs(i-1,j)
+            dfs(i,j+1)
+            dfs(i,j-1)
+        ans = 0
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j]=='1':
+                    ans += 1
+                    dfs(i,j)
+        return ans
+```
+
+### Leetcode 695.岛屿的最大面积(medium)
+
+[Leetcode 695.岛屿的最大面积](https://leetcode.cn/problems/max-area-of-island/)
+
+```python3
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        m,n = len(grid),len(grid[0])
+        # dfs(i,j)返回以(i,j)为起点的岛屿面积
+        def dfs(i,j):
+            if i<0 or i>=m or j<0 or j>=n or grid[i][j]==0:
+                return 0
+            grid[i][j] = 0
+            return 1 + dfs(i+1,j) + dfs(i-1,j) + dfs(i,j+1) + dfs(i,j-1)
+        ans = 0
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j]==1:
+                    ans = max(ans,dfs(i,j))
+        return ans
+```
+
+### Leetcode 79.单词搜索(medium)
+
+[Leetcode 79.单词搜索](https://leetcode.cn/problems/word-search/)
+
+```python3
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        m,n = len(board),len(board[0])
+        # dfs(x,y,idx)表示从(x,y)开始匹配word[idx:]
+        def dfs(x,y,idx):
+            if idx == len(word):
+                return True
+            if x<0 or x>=m or y<0 or y>=n or board[x][y]!=word[idx]:
+                return False
+            # 标记已访问
+            tmp = board[x][y]
+            board[x][y] = '#'
+            for i,j in [(x+1,y),(x-1,y),(x,y+1),(x,y-1)]:
+                if dfs(i,j,idx+1):
+                    board[x][y] = tmp
+                    return True
+            board[x][y] = tmp
+            return False
+        for i in range(m):
+            for j in range(n):
+                if dfs(i,j,0):
+                    return True
+        return False
+```
+
+### Leetcode 22.括号生成(medium)
+
+[Leetcode 22.括号生成](https://leetcode.cn/problems/generate-parentheses/)
+
+```python3
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        # ans保存所有可行的括号组合
+        ans = []
+        # left和right分别表示剩余的左右括号数量
+        def dfs(left, right, path):
+            # 当左右括号都用完时,加入答案
+            if left == 0 and right == 0:
+                ans.append(''.join(path))
+                return
+            if left > 0:
+                path.append('(')
+                dfs(left-1, right, path)
+                path.pop()
+            if right > left:
+                path.append(')')
+                dfs(left, right-1, path)
+                path.pop()
+        dfs(n, n, [])
+        return ans
+```
+
+### Leetcode 39.组合总和(medium)
+
+[Leetcode 39.组合总和](https://leetcode.cn/problems/combination-sum/)
+
+```python3
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        ans = []
+        # 从start开始选择,remain表示剩余和
+        def dfs(start, remain, path):
+            if remain == 0:
+                ans.append(path[::])
+                return
+            for i in range(start, len(candidates)):
+                if candidates[i] > remain:
+                    break
+                path.append(candidates[i])
+                dfs(i, remain - candidates[i], path)
+                path.pop()
+        dfs(0, target, [])
+        return ans
+```
+
+### Leetcode 40.组合总和II(medium)
+
+[Leetcode 40.组合总和II](https://leetcode.cn/problems/combination-sum-ii/)
+
+```python3
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        ans = []
+        # 与组合总和不同,每个数字只能使用一次
+        def dfs(start, remain, path):
+            if remain == 0:
+                ans.append(path[::])
+                return
+            for i in range(start, len(candidates)):
+                if candidates[i] > remain:
+                    break
+                if i > start and candidates[i] == candidates[i-1]:
+                    continue
+                path.append(candidates[i])
+                dfs(i+1, remain - candidates[i], path)
+                path.pop()
+        dfs(0, target, [])
+        return ans
+```
+
+### Leetcode 77.组合(medium)
+
+[Leetcode 77.组合](https://leetcode.cn/problems/combinations/)
+
+```python3
+class Solution:
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        ans = []
+        # start表示当前选择的起点
+        def dfs(start, path):
+            if len(path) == k:
+                ans.append(path[::])
+                return
+            for i in range(start, n+1):
+                path.append(i)
+                dfs(i+1, path)
+                path.pop()
+        dfs(1, [])
+        return ans
+```
+
+### Leetcode 90.子集II(medium)
+
+[Leetcode 90.子集II](https://leetcode.cn/problems/subsets-ii/)
+
+```python3
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        ans = []
+        # idx表示当前枚举到的位置
+        def dfs(idx, path):
+            ans.append(path[::])
+            for i in range(idx, len(nums)):
+                if i > idx and nums[i] == nums[i-1]:
+                    continue
+                path.append(nums[i])
+                dfs(i+1, path)
+                path.pop()
+        dfs(0, [])
+        return ans
+```
+
+### Leetcode 131.分割回文串(medium)
+
+[Leetcode 131.分割回文串](https://leetcode.cn/problems/palindrome-partitioning/)
+
+```python3
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        ans = []
+        # start表示当前起始位置
+        def dfs(start, path):
+            if start == len(s):
+                ans.append(path[::])
+                return
+            for end in range(start, len(s)):
+                tmp = s[start:end+1]
+                if tmp == tmp[::-1]:
+                    path.append(tmp)
+                    dfs(end+1, path)
+                    path.pop()
+        dfs(0, [])
+        return ans
+```
+
+### Leetcode 257.二叉树的所有路径(easy)
+
+[Leetcode 257.二叉树的所有路径](https://leetcode.cn/problems/binary-tree-paths/)
+
+```python3
+class Solution:
+    def binaryTreePaths(self, root: Optional[TreeNode]) -> List[str]:
+        ans = []
+        # path保存从根到当前节点的路径
+        def dfs(node, path):
+            if not node:
+                return
+            path.append(str(node.val))
+            if not node.left and not node.right:
+                ans.append('->'.join(path))
+            else:
+                dfs(node.left, path)
+                dfs(node.right, path)
+            path.pop()
+        dfs(root, [])
+        return ans
+```
+
+### Leetcode 332.重新安排行程(hard)
+
+[Leetcode 332.重新安排行程](https://leetcode.cn/problems/reconstruct-itinerary/)
+
+```python3
+from collections import defaultdict
+
+class Solution:
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        graph = defaultdict(list)
+        # 逆序插入便于弹出最小的目的地
+        for a, b in sorted(tickets, reverse=True):
+            graph[a].append(b)
+        ans = []
+        def dfs(u):
+            while graph[u]:
+                dfs(graph[u].pop())
+            ans.append(u)
+        dfs('JFK')
+        return ans[::-1]
+```
+
+### Leetcode 547.省份数量(medium)
+
+[Leetcode 547.省份数量](https://leetcode.cn/problems/number-of-provinces/)
+
+```python3
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        n = len(isConnected)
+        vis = [False] * n
+        def dfs(i):
+            vis[i] = True
+            for j in range(n):
+                if isConnected[i][j] and not vis[j]:
+                    dfs(j)
+        ans = 0
+        for i in range(n):
+            if not vis[i]:
+                ans += 1
+                dfs(i)
+        return ans
+```
+
+### Leetcode 733.图像渲染(easy)
+
+[Leetcode 733.图像渲染](https://leetcode.cn/problems/flood-fill/)
+
+```python3
+class Solution:
+    def floodFill(self, image: List[List[int]], sr: int, sc: int, color: int) -> List[List[int]]:
+        m,n = len(image),len(image[0])
+        old = image[sr][sc]
+        if old == color:
+            return image
+        # 把与(sr,sc)相连的像素都染成color
+        def dfs(i,j):
+            if i<0 or i>=m or j<0 or j>=n or image[i][j]!=old:
+                return
+            image[i][j] = color
+            dfs(i+1,j)
+            dfs(i-1,j)
+            dfs(i,j+1)
+            dfs(i,j-1)
+        dfs(sr,sc)
+        return image
+```
 # 面试记录
 
-## 手写快排 
+## 手写快排
 
 快排分为两个部分，一个是quicksort主体递归部分，另一个是partition分区部分。
 
